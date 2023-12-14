@@ -15,22 +15,26 @@
 ## 디렉토리 구조
 
 ```bash
-├── src/app
-├── api //api 목록
-│   └── nft
-│   │   ├── buy
-│   │   ├── create
-│   │   ├── delete
-│   │   ├── details
-│   │   ├── list
-│   │   └── sale
-│   └── solc
-├── components // 모달창 및 헤더
-├── nft //페이지 목록
-│   ├── create
-│   ├── details
-│   └── list
-└── page.tsx
+├── app/
+│   ├── api/ //api 목록
+│   │   └── nft/
+│   │   │   ├── buy/
+│   │   │   ├── create/
+│   │   │   ├── delete/
+│   │   │   ├── details/
+│   │   │   ├── list/
+│   │   │   └── sale/
+│   │   └── solc/
+│   ├── components // 모달창 및 헤더
+│   ├── nft //페이지 목록
+│   │   ├── create/
+│   │   ├── details/
+│   │   └── list/
+│   └── page.tsx
+├── public/ //api 목록
+│   ├── tmp // 이미지 업로드 폴더
+│   └── data.json // nft 정보 로컬 저장
+└── .env
 ```
 
 ### 4. env 파일 설정
