@@ -62,15 +62,41 @@ const Header = () => {
     const handleConnectWallet = async () => {
         try {
             // Metamask 연결 요청
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            if (window.ethereum) {
+                // Metamask에 연결된 계정 가져오기
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                if (accounts.length > 0) {
+                    // 연결된 계정이 있는 경우 지갑 주소 및 잔액 설정
+                    setWalletAddress(accounts[0]);
 
-            if (accounts.length > 0) {
-                // 연결된 계정이 있는 경우 지갑 주소 및 잔액 설정
-                setWalletAddress(accounts[0]);
+                    // 지갑 잔액 조회
+                    const balance = await getWalletBalance(accounts[0]);
+                    setWalletBalance(balance);
+                } else {
+                    // Metamask가 잠금 상태인 경우
+                    await window.ethereum.request({
+                        method: 'wallet_requestPermissions',
+                        params: [
+                            {
+                                "eth_accounts": {}
+                            }
+                        ]
+                    });
+                    // 다시 연결 시도
+                    handleConnectWallet();
+                }
+            } else {
+                console.log('Metamask not detected.');
 
-                // 지갑 잔액 조회
-                const balance = await getWalletBalance(accounts[0]);
-                setWalletBalance(balance);
+                // Metamask 설치 페이지로 이동하는 경고창
+                const installMetamaskConfirmation = window.confirm(
+                    'Metamask is not installed. Do you want to install it now?'
+                );
+
+                if (installMetamaskConfirmation) {
+                    // Metamask 설치 페이지를 새 창으로 열기
+                    window.open('https://metamask.io/download.html', '_blank');
+                }
             }
         } catch (error) {
             console.error('Error connecting Metamask wallet:', error);
